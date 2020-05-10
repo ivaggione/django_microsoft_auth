@@ -61,17 +61,17 @@ class MicrosoftClient(OAuth2Session):
             current_site = Site.objects.first()
 
         domain = current_site.domain
-        path = reverse("microsoft_auth:auth-callback")
-        scope = " ".join(self.SCOPE_MICROSOFT)
+        path = reverse(self.config.MICROSOFT_AUTH_CALLBACK_VIEW)
+        scope = u" ".join(self.SCOPE_MICROSOFT)
 
         if self.config.MICROSOFT_AUTH_LOGIN_TYPE == LOGIN_TYPE_XBL:
-            scope = " ".join(self.SCOPE_XBL)
+            scope = u" ".join(self.SCOPE_XBL)
 
-        scope = "{} {}".format(scope, extra_scopes).strip()
+        scope = u"{} {}".format(scope, extra_scopes).strip()
 
         scheme = get_scheme(request, self.config)
 
-        super().__init__(
+        super(MicrosoftClient, self).__init__(
             self.config.MICROSOFT_AUTH_CLIENT_ID,
             scope=scope,
             state=state,
@@ -162,12 +162,12 @@ class MicrosoftClient(OAuth2Session):
         if self.config.MICROSOFT_AUTH_LOGIN_TYPE == LOGIN_TYPE_XBL:
             auth_url = self._xbox_authorization_url
 
-        return super().authorization_url(auth_url, response_mode="form_post")
+        return super(MicrosoftClient, self).authorization_url(auth_url, response_mode="form_post")
 
     def fetch_token(self, **kwargs):
         """ Fetchs OAuth2 Token with given kwargs"""
 
-        return super().fetch_token(  # pragma: no cover
+        return super(MicrosoftClient, self).fetch_token(  # pragma: no cover
             self.openid_config["token_endpoint"],
             client_secret=self.config.MICROSOFT_AUTH_CLIENT_SECRET,
             **kwargs

@@ -162,6 +162,14 @@ DEFAULT_CONFIG = {
             ),
             str,
         ),
+        "MICROSOFT_AUTH_CALLBACK_VIEW": (
+            "microsoft_auth:auth-callback",
+            _(
+                """Override this to get another view (and url)
+                """
+            ),
+            str,
+        ),
     },
     "fieldsets": {
         "Microsoft Login": (
